@@ -6,9 +6,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QPlainTextEdit
 
-
 DOTS_TO_UNICODE = tuple([chr(x) for x in range(0x2800, 0x2900)])
-
 
 QWERTY_SIX_KEYS = MappingProxyType({
     Qt.Key.Key_F: 0x1,
@@ -23,8 +21,6 @@ QWERTY_SIX_KEYS = MappingProxyType({
 class SixKeyEdit(QPlainTextEdit):
     def __init__(self, dots_to_char=DOTS_TO_UNICODE, key_to_dots=QWERTY_SIX_KEYS, parent=None):
         super().__init__(parent)
-        if dots_to_char is None:
-            dots_to_char = DOTS_TO_UNICODE
         self._dots = 0
         self._key_state = 0
         self._key_to_dots = key_to_dots
@@ -32,7 +28,8 @@ class SixKeyEdit(QPlainTextEdit):
 
     def keyPressEvent(self, e: QKeyEvent) -> None:
         key_text = e.text()
-        if e.keyCombination().keyboardModifiers() == Qt.KeyboardModifier.NoModifier and e.key() != Qt.Key.Key_Space and key_text and key_text.isprintable():
+        if (e.keyCombination().keyboardModifiers() == Qt.KeyboardModifier.NoModifier and
+                e.key() != Qt.Key.Key_Space and key_text and key_text.isprintable()):
             if e.key() in self._key_to_dots:
                 key_dot = self._key_to_dots[e.key()]
                 self._dots |= key_dot
@@ -42,7 +39,8 @@ class SixKeyEdit(QPlainTextEdit):
 
     def keyReleaseEvent(self, e: QKeyEvent) -> None:
         key_text = e.text()
-        if e.keyCombination().keyboardModifiers() == Qt.KeyboardModifier.NoModifier and e.key() != Qt.Key.Key_Space and key_text and key_text.isprintable():
+        if (e.keyCombination().keyboardModifiers() == Qt.KeyboardModifier.NoModifier and
+                e.key() != Qt.Key.Key_Space and key_text and key_text.isprintable()):
             if e.key() in self._key_to_dots:
                 key_dot = self._key_to_dots[e.key()] ^ 0xff
                 self._key_state &= key_dot
