@@ -39,7 +39,7 @@ summary = "Python/C++ bindings helper module"
 
 [metadata]
 lock_version = "4.2"
-groups = ["default"]
+groups = ["default", "dev"]
 content_hash = "sha256:2c71045b5039f5e60d32c8e319b8864e39ee98c97e70721cf97eabd2360c21b9"
 
 [metadata.files]
