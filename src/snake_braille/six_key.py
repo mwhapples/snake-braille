@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QPlainTextEdit
 DOTS_TO_UNICODE = tuple([chr(x) for x in range(0x2800, 0x2900)])
 
 QWERTY_SIX_KEYS = MappingProxyType({
+    Qt.Key.Key_Space: 0,
     Qt.Key.Key_F: 0x1,
     Qt.Key.Key_D: 0x2,
     Qt.Key.Key_S: 0x4,
@@ -31,7 +32,7 @@ class SixKeyEdit(QPlainTextEdit):
         key_text = e.text()
         modifiers = e.keyCombination().keyboardModifiers()
         return ((modifiers == Qt.KeyboardModifier.NoModifier or modifiers == Qt.KeyboardModifier.ShiftModifier) and
-                e.key() != Qt.Key.Key_Space and key_text and key_text.isprintable())
+                key_text and key_text.isprintable())
 
     def keyPressEvent(self, e: QKeyEvent) -> None:
         if self._braille_handle_key_event(e):
@@ -50,3 +51,5 @@ class SixKeyEdit(QPlainTextEdit):
             if not self._key_state:
                 self.insertPlainText(self._dots_to_char[self._dots & 0xff])
                 self._dots = 0
+        else:
+            super().keyReleaseEvent(e)
