@@ -27,9 +27,7 @@ class SixKeyEdit(QPlainTextEdit):
         self._dots_to_char = dots_to_char
 
     def keyPressEvent(self, e: QKeyEvent) -> None:
-        key_text = e.text()
-        if (e.keyCombination().keyboardModifiers() == Qt.KeyboardModifier.NoModifier and
-                e.key() != Qt.Key.Key_Space and key_text and key_text.isprintable()):
+        if self._braille_handle_key_event(e):
             if e.key() in self._key_to_dots:
                 key_dot = self._key_to_dots[e.key()]
                 self._dots |= key_dot
@@ -37,10 +35,15 @@ class SixKeyEdit(QPlainTextEdit):
         else:
             super().keyPressEvent(e)
 
-    def keyReleaseEvent(self, e: QKeyEvent) -> None:
+    @staticmethod
+    def _braille_handle_key_event(e):
         key_text = e.text()
-        if (e.keyCombination().keyboardModifiers() == Qt.KeyboardModifier.NoModifier and
-                e.key() != Qt.Key.Key_Space and key_text and key_text.isprintable()):
+        modifiers = e.keyCombination().keyboardModifiers()
+        return ((modifiers == Qt.KeyboardModifier.NoModifier or modifiers == Qt.KeyboardModifier.ShiftModifier) and
+                e.key() != Qt.Key.Key_Space and key_text and key_text.isprintable())
+
+    def keyReleaseEvent(self, e: QKeyEvent) -> None:
+        if self._braille_handle_key_event(e):
             if e.key() in self._key_to_dots:
                 key_dot = self._key_to_dots[e.key()] ^ 0xff
                 self._key_state &= key_dot
