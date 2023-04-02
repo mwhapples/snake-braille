@@ -1,0 +1,23 @@
+[tool.pdm]
+version = { source = "file", path = "src/snake_braille/__init__.py" }
+
+[project]
+dynamic = ["version"]
+name = "snake-braille"
+description = "A simple Braille editor."
+authors = [
+    {name = "Michael Whapples", email = "mwhapples@aim.com"},
+]
+dependencies = [
+    "pyside6>=6.4.3",
+]
+requires-python = ">=3.11,<3.12"
+readme = "README.md"
+license = {text = "GPL-3.0-only"}
+
+[project.gui-scripts]
+sb-edit = "snake_braille.main:main"
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
