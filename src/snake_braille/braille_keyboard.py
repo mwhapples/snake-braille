@@ -89,6 +89,11 @@ _DOTS_KEYS = {
     0x102: (Qt.Key.Key_Left, Qt.KeyboardModifier.NoModifier, ""),
     0x104: (Qt.Key.Key_Down, Qt.KeyboardModifier.NoModifier, ""),
     0x110: (Qt.Key.Key_Right, Qt.KeyboardModifier.NoModifier, ""),
+    0x111: (Qt.Key.Key_Escape, Qt.KeyboardModifier.NoModifier, ""),
+    0x141: (Qt.Key.Key_Up, Qt.KeyboardModifier.ShiftModifier, ""),
+    0x142: (Qt.Key.Key_Left, Qt.KeyboardModifier.ShiftModifier, ""),
+    0x144: (Qt.Key.Key_Down, Qt.KeyboardModifier.ShiftModifier, ""),
+    0x150: (Qt.Key.Key_Right, Qt.KeyboardModifier.ShiftModifier, ""),
 }
 
 
@@ -106,7 +111,9 @@ def createBrailleKeyboardEvents():
     return {d: (lambda w, k=k, m=m, t=t, d=d: keyEvents(w, k, m, t, d)) for (d, (k, m, t)) in _DOTS_KEYS.items()}
 
 
-DOTS_TO_EVENTS = MappingProxyType(createBrailleKeyboardEvents())
+DOTS_TO_EVENTS = MappingProxyType(createBrailleKeyboardEvents() | {
+    0x11f: lambda w: w.close()
+})
 
 
 class BrailleKeyboardFilter(QObject):
