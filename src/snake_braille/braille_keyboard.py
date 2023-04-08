@@ -126,7 +126,7 @@ class BrailleKeyboardFilter(QObject):
                 if event.key() in self._keysToDots:
                     self._keyState &= self._keysToDots[event.key()] ^ 0xffff
                     if self._keyState == 0:
-                        events = DOTS_TO_EVENTS.get(self._dots, [])
+                        events = DOTS_TO_EVENTS.get(self._dots, lambda: [])
                         for x in events():
                             QCoreApplication.sendEvent(watched, x)
                         self._dots = 0
